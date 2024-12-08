@@ -33,3 +33,4 @@
 export * from "./load-parser.js";
 export * from "./coord.js";
 export * from "./grid.js";
+export * from "./memoise.js";

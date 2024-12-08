@@ -1,20 +1,7 @@
 import run from "aocrunner";
 
 import { parse } from "./parser.js";
-
-const memoise = (fn: (n: number[]) => number[]) => {
-  const cache: Record<string, number[]> = {};
-
-  return (n: number[]) => {
-    const key = JSON.stringify(n);
-    if (typeof cache[key] !== "undefined") {
-      return cache[key];
-    }
-    const result = fn(n);
-    cache[key] = result;
-    return result;
-  };
-};
+import { memoise } from "../utils/index.js";
 
 const possibleResults = memoise((values: number[]): number[] => {
   if (values.length === 1) {
