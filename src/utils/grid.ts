@@ -1,6 +1,6 @@
 import { Coord } from "./coord.js";
 
-export class Grid<T> {
+export class Grid<T = string> {
   private readonly markMap: Record<string, Record<string, unknown>> = {};
   public zLine = 0;
   public zChar = 0;

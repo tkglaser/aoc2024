@@ -1,9 +1,4 @@
-export interface ICoord {
-  readonly line: number;
-  readonly char: number;
-}
-
-export class Coord implements ICoord {
+export class Coord {
   private constructor(readonly line: number, readonly char: number) {
     Object.freeze(this);
   }
@@ -17,11 +12,15 @@ export class Coord implements ICoord {
     return new Coord(line, char);
   }
 
-  add(c: ICoord) {
+  add(c: Coord) {
     return new Coord(this.line + c.line, this.char + c.char);
   }
 
-  eq(c: ICoord) {
+  subtract(c: Coord) {
+    return this.add(c.not);
+  }
+
+  eq(c: Coord) {
     return this.line === c.line && this.char === c.char;
   }
 
