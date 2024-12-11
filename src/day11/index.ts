@@ -3,7 +3,9 @@ import run from "aocrunner";
 import { parse } from "./parser.js";
 import { memoise } from "../utils/memoise.js";
 
-const transform = (input: number) => {
+const sum = (items: number[]) => items.reduce((prev, curr) => prev + curr, 0);
+
+const transform = (input: number): number[] => {
   if (input === 0) {
     return [1];
   }
@@ -18,30 +20,27 @@ const transform = (input: number) => {
   return [input * 2024];
 };
 
-const blinkTimes = memoise((input: number, blinks: number): number => {
-  if (blinks === 1) {
-    return transform(input).length;
+const blinkTimes = memoise((stone: number, blinks: number): number => {
+  if (blinks === 0) {
+    return 1;
   }
 
-  const steps = transform(input);
-
-  return steps
-    .map((item) => blinkTimes(item, blinks - 1))
-    .reduce((prev, curr) => prev + curr, 0);
+  const remainingBlinks = (item: number) => blinkTimes(item, blinks - 1);
+  return sum(transform(stone).map(remainingBlinks));
 });
 
 const part1 = (rawInput: string) => {
   const input = parse(rawInput);
   const blink = (item: number) => blinkTimes(item, 25);
 
-  return input.map(blink).reduce((prev, curr) => prev + curr, 0);
+  return sum(input.map(blink));
 };
 
 const part2 = (rawInput: string) => {
   const input = parse(rawInput);
   const blink = (item: number) => blinkTimes(item, 75);
 
-  return input.map(blink).reduce((prev, curr) => prev + curr, 0);
+  return sum(input.map(blink));
 };
 
 run({
