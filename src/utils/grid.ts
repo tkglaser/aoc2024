@@ -74,6 +74,10 @@ export class Grid<T = string> {
     return this.markMap[label]?.[c.hash] as M;
   }
 
+  hasMark(label: string, c: Coord) {
+    return typeof this.getMark(label, c) !== "undefined";
+  }
+
   getAllMarked(label: string, value: unknown) {
     return Object.entries(this.markMap[label] ?? {})
       .filter(([, v]) => v === value)
