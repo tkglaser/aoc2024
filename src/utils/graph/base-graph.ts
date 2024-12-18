@@ -2,8 +2,12 @@ import { IHashable } from "../ihashable.js";
 import { Edge } from "./edge.js";
 import { IGraph } from "./igraph.js";
 
-export abstract class BaseGraph<V extends IHashable> implements IGraph {
-  abstract neigbours(from: V): Edge<V>[];
+export abstract class BaseGraph<
+  V extends IHashable,
+  E extends Edge<V> = Edge<V>,
+> implements IGraph<V, E>
+{
+  abstract neigbours(from: V): E[];
 
   private readonly markMap: Record<string, Record<string, unknown>> = {};
 

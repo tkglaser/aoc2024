@@ -3,7 +3,7 @@ import { IGraph } from "../graph/igraph.js";
 import { IHashable } from "../ihashable.js";
 
 export function dijkstra<V extends IHashable>(
-  graph: IGraph,
+  graph: IGraph<V>,
   start: V,
   isTarget: (node: V) => boolean,
 ) {
@@ -24,8 +24,9 @@ export function dijkstra<V extends IHashable>(
 
     do {
       path.unshift(curr);
-      curr = graph.getMark("origin", curr)!;
-    } while (curr !== start);
+      const origins = graph.getMark<V[]>("origin", curr)!;
+      curr = origins[0];
+    } while (curr.hash !== start.hash);
     return path;
   };
 
@@ -58,8 +59,13 @@ export function dijkstra<V extends IHashable>(
       const isBetter = newNDist < nDist;
       if (isBetter) {
         graph.mark("distance", n.to, newNDist);
-        graph.mark("origin", n.to, curr);
+        graph.mark("origin", n.to, [curr]);
         q.enqueue({ node: n.to, distance: newNDist });
+      } else if (newNDist === nDist) {
+        // alt path of same distance
+        const origins = graph.getMark<V[]>("origin", n.to)!;
+        origins.push(curr);
+        graph.mark("origin", n.to, origins);
       }
     }
     graph.mark("visited", curr, true);
