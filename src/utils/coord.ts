@@ -14,6 +14,41 @@ export class Coord implements IHashable {
     return new Coord(coords);
   }
 
+  // ----------- 2D Helpers --------------
+  get line() {
+    return this.coords[0];
+  }
+
+  get char() {
+    return this.coords[1];
+  }
+
+  static get north() {
+    return Coord.from(-1, 0);
+  }
+
+  static get east() {
+    return Coord.from(0, 1);
+  }
+
+  static get south() {
+    return Coord.from(1, 0);
+  }
+
+  static get west() {
+    return Coord.from(0, -1);
+  }
+
+  get turn90Clockwise() {
+    return Coord.from(this.coords[1], -this.coords[0]);
+  }
+
+  get turn90AntiClockwise() {
+    return Coord.from(-this.coords[1], this.coords[0]);
+  }
+
+  // --------------------------------------
+
   add(c: Coord) {
     return new Coord(this.zip(this.coords, c.coords, (a, b) => a + b));
   }
@@ -26,16 +61,6 @@ export class Coord implements IHashable {
     return this.zip(this.coords, c.coords, (a, b) => a === b).every(
       (item) => item === true,
     );
-  }
-
-  // convenience method for 2D grids
-  get line() {
-    return this.coords[0];
-  }
-
-  // convenience method for 2D grids
-  get char() {
-    return this.coords[1];
   }
 
   get not() {

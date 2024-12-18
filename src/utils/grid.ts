@@ -49,14 +49,20 @@ export class Grid<T = string> {
   static empty<T>(dims?: { lines: number; chars: number }) {
     if (dims) {
       return new Grid<T>(new Map(), dims.lines, dims.chars, false, false);
-    } 
+    }
     return new Grid<T>(new Map(), 0, 0, false, true);
+  }
+
+  findAll(pred: (val: T, c: Coord) => boolean) {
+    return Array.from(this.idx.entries())
+      .map(([c, val]) => ({ coord: Coord.fromHash(c), val }))
+      .filter(({ coord, val }) => pred(val, coord));
   }
 
   find(pred: (val: T, c: Coord) => boolean) {
     return Array.from(this.idx.entries())
       .map(([c, val]) => ({ coord: Coord.fromHash(c), val }))
-      .filter(({ coord, val }) => pred(val, coord));
+      .find(({ coord, val }) => pred(val, coord));
   }
 
   mark(label: string, c: Coord, value: unknown) {
@@ -113,12 +119,13 @@ export class Grid<T = string> {
   tile(c: Coord): T | undefined;
   tile(c: Coord, defaultValue: T): T;
   tile(c: Coord, defaultValue?: T) {
+    let safeC = c;
     if (this.repeats) {
       const line = c.line % this.lines;
       const char = c.char % this.chars;
-      this.idx.get(Coord.from(line, char).hash);
+      safeC = Coord.from(line, char);
     }
-    return this.idx.has(c.hash) ? this.idx.get(c.hash) : defaultValue;
+    return this.idx.has(safeC.hash) ? this.idx.get(safeC.hash) : defaultValue;
   }
 
   setTile(c: Coord, value: T) {

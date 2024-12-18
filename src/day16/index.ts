@@ -3,9 +3,9 @@ import run from "aocrunner";
 import { Grid } from "../utils/grid.js";
 import { Coord } from "../utils/coord.js";
 import { Edge } from "../utils/graph/edge.js";
-import { GraphAdapter } from "../utils/graph/graph-adapter.js";
 import { dijkstra } from "../utils/algorithms/dijkstra.js";
 import { IHashable } from "../utils/ihashable.js";
+import { BaseGraph } from "../utils/graph/base-graph.js";
 
 class Reindeer implements IHashable {
   constructor(public pos: Coord, public direction: Coord) {
@@ -26,22 +26,23 @@ class Reindeer implements IHashable {
   }
 
   turnLeft() {
-    const d = Coord.from(-this.direction.coords[1], this.direction.coords[0]);
-    return new Reindeer(this.pos, d);
+    return new Reindeer(this.pos, this.direction.turn90AntiClockwise);
   }
 
   turnRight() {
-    const d = Coord.from(this.direction.coords[1], -this.direction.coords[0]);
-    return new Reindeer(this.pos, d);
+    return new Reindeer(this.pos, this.direction.turn90Clockwise);
   }
 }
 
-const reindeerGraph = (grid: Grid) =>
-  new GraphAdapter((fromHashable) => {
-    const result: Edge[] = [];
-    const from = fromHashable as Reindeer;
+class ReindeerGraph extends BaseGraph<Reindeer> {
+  constructor(private grid: Grid) {
+    super();
+  }
+
+  neigbours(from: Reindeer): Edge<Reindeer>[] {
+    const result: Edge<Reindeer>[] = [];
     const along = from.move();
-    if (grid.isInBounds(along.pos) && grid.tile(along.pos) !== "#") {
+    if (this.grid.isInBounds(along.pos) && this.grid.tile(along.pos) !== "#") {
       result.push({ from, to: along, value: 1 });
     }
     result.push(
@@ -49,21 +50,20 @@ const reindeerGraph = (grid: Grid) =>
       { from, to: from.turnRight(), value: 1000 },
     );
     return result;
-  });
+  }
+}
 
 const part1 = (rawInput: string) => {
   const input = Grid.fromText(rawInput, { repeats: false });
 
-  const startPos = input.find((v) => v === "S")[0].coord;
-  const destPos = input.find((v) => v === "E")[0].coord;
+  const startPos = input.find((v) => v === "S")!.coord;
+  const destPos = input.find((v) => v === "E")!.coord;
 
-  const start = new Reindeer(startPos, Coord.from(0, 1));
+  const start = new Reindeer(startPos, Coord.east);
 
-  const graph = reindeerGraph(input);
+  const graph = new ReindeerGraph(input);
 
-  const search = dijkstra(graph, start, (node) =>
-    (node as Reindeer).pos.eq(destPos),
-  );
+  const search = dijkstra(graph, start, (node) => node.pos.eq(destPos));
 
   return search?.dist;
 };

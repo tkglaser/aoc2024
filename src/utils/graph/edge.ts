@@ -1,8 +1,7 @@
 import { IHashable } from "../ihashable";
 
-export interface Edge {
-    from: IHashable;
-    to: IHashable;
-    value: number;
-  }
-  
+export interface Edge<V extends IHashable> {
+  from: V;
+  to: V;
+  value: number;
+}

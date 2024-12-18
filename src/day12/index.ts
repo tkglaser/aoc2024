@@ -16,7 +16,7 @@ const part1 = (rawInput: string) => {
   const input = Grid.fromText(rawInput, { repeats: false });
 
   const findTileWithNoRegion = () =>
-    input.find((_, c) => !input.getMark<number>("region", c))[0]?.coord;
+    input.find((_, c) => !input.getMark<number>("region", c))?.coord;
 
   const flood = (start: Coord, regionId: number) => {
     const crop = input.tile(start)!;
@@ -88,7 +88,7 @@ const part2 = (rawInput: string) => {
   const input = Grid.fromText(rawInput, { repeats: false });
 
   const findTileWithNoRegion = () =>
-    input.find((_, c) => !input.getMark<number>("region", c))[0]?.coord;
+    input.findAll((_, c) => !input.getMark<number>("region", c))[0]?.coord;
 
   const flood = (start: Coord, regionId: number) => {
     const crop = input.tile(start)!;

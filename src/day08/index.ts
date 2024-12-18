@@ -6,7 +6,7 @@ type Antenna = { location: Coord; frequency: string };
 
 const findAntennas = (grid: Grid): Antenna[] =>
   grid
-    .find((val) => val !== ".")
+    .findAll((val) => val !== ".")
     .map((item) => ({ location: item.coord, frequency: item.val }));
 
 const countAntiNodes = (grid: Grid) => {

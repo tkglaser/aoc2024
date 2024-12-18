@@ -10,7 +10,7 @@ const directions = [
 ];
 
 const findTrailHeads = (grid: Grid<number>) =>
-  grid.find((val) => val === 0).map((item) => item.coord);
+  grid.findAll((val) => val === 0).map((item) => item.coord);
 
 const endsReached = (trailHead: Coord, grid: Grid<number>) => {
   const dfsEnds = (point: Coord): Coord[] => {

@@ -2,14 +2,14 @@ import { MinPriorityQueue } from "@datastructures-js/priority-queue";
 import { IGraph } from "../graph/igraph.js";
 import { IHashable } from "../ihashable.js";
 
-export function dijkstra(
+export function dijkstra<V extends IHashable>(
   graph: IGraph,
-  start: IHashable,
-  isTarget: (node: IHashable) => boolean,
+  start: V,
+  isTarget: (node: V) => boolean,
 ) {
   graph.mark("distance", start, 0);
   let curr = start;
-  const q = new MinPriorityQueue<{ node: IHashable; distance: number }>(
+  const q = new MinPriorityQueue<{ node: V; distance: number }>(
     (v) => v.distance,
   );
   q.enqueue({ node: start, distance: 0 });
@@ -18,8 +18,8 @@ export function dijkstra(
     graph.clearAllMarks("visited");
   };
 
-  const tracePath = (t: IHashable) => {
-    const path: IHashable[] = [];
+  const tracePath = (t: V) => {
+    const path: V[] = [];
     let curr = t;
 
     do {

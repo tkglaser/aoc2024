@@ -4,7 +4,7 @@ import { Grid } from "../utils/grid.js";
 import { Coord } from "../utils/coord.js";
 
 const findCursor = (grid: Grid<string>) =>
-  grid.find((val) => val === "^")[0].coord;
+  grid.find((val) => val === "^")!.coord;
 
 const traverse = (grid: Grid<string>) => {
   const up = Coord.from(-1, 0);

@@ -76,7 +76,7 @@ const move = (grid: Grid<WarehouseItems>, robot: Coord, direction: Coord) => {
 
 const score = (grid: Grid<WarehouseItems>) => {
   return grid
-    .find((v) => v === WarehouseItems.Box)
+    .findAll((v) => v === WarehouseItems.Box)
     .map((item) => 100 * item.coord.coords[0] + item.coord.coords[1])
     .reduce((prev, curr) => prev + curr, 0);
 };
@@ -84,7 +84,7 @@ const score = (grid: Grid<WarehouseItems>) => {
 const part1 = (rawInput: string) => {
   const { grid, moves } = parse(rawInput);
 
-  let robot = grid.find((v) => v === WarehouseItems.Robot)[0].coord;
+  let robot = grid.find((v) => v === WarehouseItems.Robot)!.coord;
 
   for (const step of moves) {
     if (canMove(grid, robot, step)) {
