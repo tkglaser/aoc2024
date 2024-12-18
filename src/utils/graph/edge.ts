@@ -1,6 +1,8 @@
+import { IHashable } from "../ihashable";
+
 export interface Edge {
-    from: string;
-    to: string;
+    from: IHashable;
+    to: IHashable;
     value: number;
   }
   

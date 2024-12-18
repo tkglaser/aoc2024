@@ -1,17 +1,16 @@
+import { IHashable } from "../ihashable.js";
 import { Edge } from "./edge.js";
 
-export type Vertex = string;
-
 export interface IGraph {
-  neigbours(from: string): Edge[];
+  neigbours(from: IHashable): Edge[];
 
-  mark<M>(label: string, vertex: Vertex, value: M): void;
+  mark<M>(label: string, vertex: IHashable, value: M): void;
 
-  unMark(label: string, vertex: Vertex): void;
+  unMark(label: string, vertex: IHashable): void;
 
-  getMark<M>(label: string, vertex: Vertex): M | undefined;
+  getMark<M>(label: string, vertex: IHashable): M | undefined;
 
-  getAllMarked(label: string, value: unknown): Vertex[];
+  getAllMarked(label: string, value: unknown): string[];
 
   clearAllMarks(label: string): void;
 }

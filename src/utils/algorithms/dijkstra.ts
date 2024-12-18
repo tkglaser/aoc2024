@@ -1,15 +1,15 @@
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
 import { IGraph } from "../graph/igraph.js";
+import { IHashable } from "../ihashable.js";
 
 export function dijkstra(
   graph: IGraph,
-  start: string,
-  target: string,
-  maxDepth?: number,
+  start: IHashable,
+  isTarget: (node: IHashable) => boolean,
 ) {
   graph.mark("distance", start, 0);
   let curr = start;
-  const q = new MinPriorityQueue<{ node: string; distance: number }>(
+  const q = new MinPriorityQueue<{ node: IHashable; distance: number }>(
     (v) => v.distance,
   );
   q.enqueue({ node: start, distance: 0 });
@@ -18,9 +18,9 @@ export function dijkstra(
     graph.clearAllMarks("visited");
   };
 
-  const tracePath = () => {
-    const path: string[] = [];
-    let curr = target;
+  const tracePath = (t: IHashable) => {
+    const path: IHashable[] = [];
+    let curr = t;
 
     do {
       path.unshift(curr);
@@ -30,12 +30,6 @@ export function dijkstra(
   };
 
   do {
-    // console.log(
-    //   q
-    //     .toArray()
-    //     .map((v) => `[${v.node}](${v.distance})`)
-    //     .join(" "),
-    // );
     curr = q.dequeue()?.node;
 
     if (!curr) {
@@ -43,16 +37,16 @@ export function dijkstra(
       return;
     }
 
-    if (curr === target) {
+    const currDist = graph.getMark<number>("distance", curr)!;
+
+    if (isTarget(curr)) {
       cleanup();
-      return tracePath();
+      return { p: tracePath(curr), dist: currDist };
     }
 
     if (graph.getMark("visited", curr)) {
       continue;
     }
-
-    const currDist = graph.getMark<number>("distance", curr)!;
 
     for (const n of graph.neigbours(curr)) {
       let nDist = graph.getMark<number>("distance", n.to);

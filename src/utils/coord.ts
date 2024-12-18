@@ -1,4 +1,6 @@
-export class Coord {
+import { IHashable } from "./ihashable.js";
+
+export class Coord implements IHashable {
   private constructor(readonly coords: number[]) {
     Object.freeze(this);
   }

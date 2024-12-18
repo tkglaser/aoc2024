@@ -1,31 +1,32 @@
+import { IHashable } from "../ihashable.js";
 import { Edge } from "./edge.js";
 import { IGraph } from "./igraph.js";
 
 export class GraphAdapter implements IGraph {
-  constructor(private neigboursFn: (from: string) => Edge[]) {}
+  constructor(private neigboursFn: (from: IHashable) => Edge[]) {}
 
-  neigbours(from: string): Edge[] {
+  neigbours(from: IHashable): Edge[] {
     return this.neigboursFn(from);
   }
 
   private readonly markMap: Record<string, Record<string, unknown>> = {};
 
-  mark<M>(label: string, vertex: string, value: M): void {
+  mark<M>(label: string, vertex: IHashable, value: M): void {
     if (!this.markMap[label]) {
       this.markMap[label] = {};
     }
-    this.markMap[label][vertex] = value;
+    this.markMap[label][vertex.hash] = value;
   }
 
-  unMark(label: string, vertex: string): void {
+  unMark(label: string, vertex: IHashable): void {
     if (!this.markMap[label]) {
       this.markMap[label] = {};
     }
-    delete this.markMap[label][vertex];
+    delete this.markMap[label][vertex.hash];
   }
 
-  getMark<M>(label: string, vertex: string): M | undefined {
-    return this.markMap[label]?.[vertex] as M;
+  getMark<M>(label: string, vertex: IHashable): M | undefined {
+    return this.markMap[label]?.[vertex.hash] as M;
   }
 
   getAllMarked(label: string, value: unknown): string[] {
