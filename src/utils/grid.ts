@@ -46,7 +46,10 @@ export class Grid<T = string> {
     );
   }
 
-  static empty<T>() {
+  static empty<T>(dims?: { lines: number; chars: number }) {
+    if (dims) {
+      return new Grid<T>(new Map(), dims.lines, dims.chars, false, false);
+    } 
     return new Grid<T>(new Map(), 0, 0, false, true);
   }
 
