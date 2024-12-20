@@ -63,6 +63,13 @@ export class Coord implements IHashable {
     );
   }
 
+  manhattan(c: Coord) {
+    return this.zip(this.coords, c.coords, (a, b) => Math.abs(a - b)).reduce(
+      (prev, curr) => prev + curr,
+      0,
+    );
+  }
+
   get not() {
     return new Coord(this.coords.map((c) => -c));
   }
