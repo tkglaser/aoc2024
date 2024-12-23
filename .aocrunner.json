@@ -333,16 +333,16 @@
     },
     {
       "part1": {
-        "solved": false,
-        "result": null,
+        "solved": true,
+        "result": "1370",
         "attempts": [],
-        "time": null
+        "time": 54.93751
       },
       "part2": {
-        "solved": false,
-        "result": null,
+        "solved": true,
+        "result": "am,au,be,cm,fo,ha,hh,im,nt,os,qz,rr,so",
         "attempts": [],
-        "time": null
+        "time": 557.991771
       }
     },
     {
